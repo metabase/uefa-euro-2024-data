@@ -1,0 +1,27 @@
+name: Sync Script
+
+on:
+  schedule:
+    # Every 15 min from 10 through 23 in every month from June through July.
+    - cron: "*/15 10-23 * 6-7 *"
+  workflow_dispatch: # Allows you to manually trigger the workflow
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.8" # Adjust this to the Python version you need
+
+      - name: Install dependencies
+        run: |
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Run sync script
+        run: python sync.py
