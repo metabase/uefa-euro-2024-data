@@ -14,14 +14,6 @@ pipeline = dlt.pipeline(
 )
 
 
-def lambda_handler(event, context):
-    """A handler to sync season data with AWS Lambda."""
-    # Your sync logic here
-    logger.info("Sync script running...")
-    # Example: Call a sync function
-    load_season(pipeline)
-
-
 if __name__ == '__main__':
     # Args
     parser = ArgumentParser()
