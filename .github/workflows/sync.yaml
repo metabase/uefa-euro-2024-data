@@ -24,10 +24,10 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
       - name: Run sync script
-        run: python sync.py
         env:
           - SPORTMONKS_API_KEY: ${{ secrets.SPORTMONKS_API_KEY }}
           - DESTINATION__POSTGRES__CREDENTIALS__DATABASE: ${{ secrets.DESTINATION__POSTGRES__CREDENTIALS__DATABASE }}
           - DESTINATION__POSTGRES__CREDENTIALS__PASSWORD: ${{ secrets.DESTINATION__POSTGRES__CREDENTIALS__PASSWORD }}
           - DESTINATION__POSTGRES__CREDENTIALS__USERNAME: ${{ secrets.DESTINATION__POSTGRES__CREDENTIALS__USERNAME }}
           - DESTINATION__POSTGRES__CREDENTIALS__HOST: ${{ secrets.DESTINATION__POSTGRES__CREDENTIALS__HOST }}
+        run: python sync.py
