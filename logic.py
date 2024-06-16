@@ -49,7 +49,7 @@ def get_fixtures(start_date_end_date: tuple = None):
         endpoint,
         params={
             'per_page': 50,
-            'include': 'events;lineups;statistics;scores;periods;participants;pressure;ballCoordinates'
+            'include': 'events;lineups;statistics;scores;periods;participants;pressure;ballcoordinates'
         }
     )
 
@@ -98,6 +98,18 @@ def get_fixtures(start_date_end_date: tuple = None):
 
         for statistic in f['statistics']:
             statistic['season_id'] = f['season_id']
+
+        for coord in f['ballcoordinates']:
+            try:
+                coord['x'] = float(coord['x'])
+                coord['y'] = float(coord['y'])
+                # Map coordinates to field regions of 0.1 x 0.1
+                coord['region'] = f"{int(coord['x'] * 10)}_{int(coord['y'] * 10)}"
+            except ValueError as e:
+                coord['x'] = None
+                coord['y'] = None
+                coord['region'] = None
+                logger.error(e)
 
     yield res
 
