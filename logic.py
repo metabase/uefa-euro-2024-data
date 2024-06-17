@@ -54,6 +54,14 @@ def get_fixtures(start_date_end_date: tuple = None):
     )
 
     for f in res:
+        # Add the date of the fixture to the name
+        f['starting_at'] = (
+            datetime.strptime(f['starting_at'], '%Y-%m-%d %H:%M:%S')
+            if not isinstance(f['starting_at'], datetime)
+            else f['starting_at']
+        )
+        f['name'] = f"{f['name']} ({f['starting_at'].strftime('%Y-%m-%d')})"
+
         for participant in f['participants']:
             participant['fixture_id'] = f['id']
             meta = participant['meta']
@@ -88,11 +96,6 @@ def get_fixtures(start_date_end_date: tuple = None):
             # Add minute and extra_minute to starting_at to get an event timestamp
             minutes_played = event['minute'] + event['extra_minute']
             # Parse starting_at from string to datetime
-            f['starting_at'] = (
-                datetime.strptime(f['starting_at'], '%Y-%m-%d %H:%M:%S')
-                if not isinstance(f['starting_at'], datetime)
-                else f['starting_at']
-            )
             event['timestamp'] = f['starting_at'] + timedelta(minutes=minutes_played)
             event['season_id'] = f['season_id']
 
