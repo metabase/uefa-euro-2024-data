@@ -231,15 +231,21 @@ def get_season_statistics(season_id: int = None):
     yield res
 
 
+def get_standings(season_id: int):
+    endpoint = f'v3/football/standings/seasons/{season_id}' if season_id else 'v3/football/standings'
+    res = load_data(endpoint, params={'per_page': 50, 'include': f'group'})
+    for standing in res:
+        standing['points'] = float(standing['points'])
+        standing['position'] = int(standing['position'])
+    yield res
+
+
 def full_load(pipeline):
     """Load all data"""
-    # Semi-live
     pipeline.run(get_fixtures, table_name='fixtures', write_disposition='merge', primary_key='id')
     pipeline.run(get_top_scorers, table_name='top_scorers', write_disposition='merge', primary_key='id')
     pipeline.run(get_season_statistics, table_name='seasons', write_disposition='merge', primary_key='id')
     pipeline.run(get_predictions, table_name='predictions', write_disposition='merge', primary_key='id')
-
-    # Once a day
     pipeline.run(get_types, table_name='types', write_disposition='merge', primary_key='id')
     pipeline.run(get_countries, table_name='countries', write_disposition='merge', primary_key='id')
     pipeline.run(get_cities, table_name='cities', write_disposition='merge', primary_key='id')
@@ -248,6 +254,7 @@ def full_load(pipeline):
     pipeline.run(get_players, table_name='players', write_disposition='merge', primary_key='id')
     pipeline.run(get_squads, table_name='squads', write_disposition='merge', primary_key='id')
     pipeline.run(get_venues, table_name='venues', write_disposition='merge', primary_key='id')
+    pipeline.run(get_standings, table_name='standings', write_disposition='merge', primary_key='id')
 
 
 def load_season(pipeline):
@@ -260,3 +267,4 @@ def load_season(pipeline):
     pipeline.run(get_top_scorers(season_id=season_id), table_name='top_scorers', write_disposition='merge', primary_key='id')
     pipeline.run(get_season_statistics(season_id=season_id), table_name='seasons', write_disposition='merge', primary_key='id')
     pipeline.run(get_predictions(), table_name='predictions', write_disposition='merge', primary_key='id')
+    pipeline.run(get_standings(season_id), table_name='standings', write_disposition='merge', primary_key='id')
