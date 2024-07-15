@@ -1,9 +1,6 @@
 name: Sync Script
 
 on:
-  schedule:
-    # Every 3 min from 10 through 23 in every month from June through July.
-    - cron: "*/3 10-23 * 6-7 *"
   workflow_dispatch: # Allows you to manually trigger the workflow
 
 jobs:
