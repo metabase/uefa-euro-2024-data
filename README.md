@@ -1,6 +1,8 @@
 # Euro 2024 Data Pipeline
 
-This repository contains the code for a data pipeline that loads data related to the Euro 2024 tournament into a Postgres database. The pipeline is built using the dlt library.
+This repository contains the code for a data pipeline that loads data related to the Euro 2024 tournament into a Postgres database.  
+The data is used to power a [Metabase Dashboard on the EURO 2024 tournament](https://www.metabase.com/gallery/uefa-euro-2024-stats-dashboard).  
+The pipeline is built using the [dlt library](https://dlthub.com/docs/intro) and uses data from the [Sportmonks API](https://www.sportmonks.com/football-api/).
 
 ## Setup
 
@@ -26,3 +28,5 @@ python sync.py [--full]
 ```
 
 By default, the script will load the data for the current season. If you want to perform a full load of all the data, you can use the `--full` option.
+
+We scheduled the ETL process using Github Actions. You'll find the code for that in the `.github/sync.yaml` file.
